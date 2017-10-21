@@ -20,12 +20,13 @@ def help11(times, num)
 			res = carry + a + b
 			if (res >= 10) then
 				cur[pos] = (res % 10).to_s.colorize(:red) if pos != 0
-				print cur, " <- add #{pos}th digit (#{a}) and #{pos + 1}th digit (#{b})" + (carry == 1 ? " with carry" : "") + (" and have carry to the next digit")
+				cur[pos] = res.to_s if pos == 0 
+				print cur, " <- add  #{pos}th digit (#{a}) to the #{pos + 1}th digit (#{b})" + (carry == 1 ? " with carry" : "") + (" and have carry to the next digit")
 				puts
 				carry = 1
 			else
 				cur[pos] = res.to_s;	 
-				print cur, " <- add #{pos}th digit (#{a}) and #{pos + 1}th digit (#{b})" + (carry == 1 ? " with carry" :"")
+				print cur, " <- add #{pos}th digit (#{a}) to the #{pos + 1}th digit (#{b})" + (carry == 1 ? " with carry" :"")
 				puts
 				carry = 0;
 			end
@@ -36,6 +37,43 @@ def help11(times, num)
 	puts "Help was done"
 end
 
+def help12(times, num)                                                                                        
+    puts "0#{num} * #{times}"                                                                                 
+    n = num.to_s.size + 1                                                                                     
+    n.times{print '-'}                                                                                        
+    puts                                                                                                      
+    cur = " " * n;                                                                                            
+    pos = n - 1                                                                                               
+    carry = 0                                                                                                 
+    while pos >= 0 do                                                                                         
+        if pos == n - 1 then                                                                                  
+            cur[pos] = ((num.to_s.split(//)[-1].to_i * 2) % 10).to_s                                                              
+			carry = (num.to_s.split(//)[-1].to_i * 2 >= 10 ? 1 : 0)
+            print cur, " <- rewrite doubled last digit" + (carry == 1 ? " and remember the carry" : "")                                                             
+			puts 
+        else                                                                                                  
+            a = (pos == 0 ? 0 : num.to_s[pos - 1].to_i)                                                       
+            b = num.to_s[pos + 1 - 1].to_i                                                                    
+            res = carry + 2 * a + b                                                                               
+            if (res >= 10) then                                                                               
+                cur[pos] = (res % 10).to_s.colorize(:red) if pos != 0                                         
+                cur[pos] = res.to_s if pos == 0 
+				print cur, " <- double #{pos}th digit (#{a}) and add #{pos + 1}th digit (#{b})" + (carry == 1 ? " with carry" : "") + (" and have carry to the next digit")
+                puts                                                                                          
+                carry = res / 10                                                                                   
+            else                                                                                              
+                cur[pos] = res.to_s;                                                                          
+                print cur, " <- double #{pos}th digit (#{a}) add and #{pos + 1}th digit (#{b})" + (carry == 1 ? " with carry" :"")
+                puts                                                                                          
+                carry = 0;                                                                                    
+            end                                                                                               
+        end                                                                                                   
+        pos -= 1                                                                                              
+    end                                                                                                       
+    puts cur                                                                                                  
+    puts "Help was done"                                                                                      
+end   
+
 def mult(times)
     a = rand(100000)
     puts "#{a} * #{times}"
@@ -43,6 +81,7 @@ def mult(times)
 		res = gets().chomp; 
 		if (res == "help") then
 			help11(times, a) if times == 11
+			help12(times, a) if times == 12
 		elsif not res.scan(/\D/).empty? or res.empty? then return end
 		if res.to_i != a * times then
 			puts "Wrong answer"
