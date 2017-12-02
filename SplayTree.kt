@@ -1,14 +1,14 @@
-class SplayTree {
+class SplayTree<T : Comparable<T>>{
 
     private var root : Node? = null
 
-    private inner class Node constructor(_key: Int) {
-        var key : Int = _key
+    private inner class Node constructor(_key: T) {
+        var key : T = _key
         var left : Node? = null
         var right : Node? = null
     }
 
-    private fun splay(cnd : Node?, key : Int) : Node? {
+    private fun splay(cnd : Node?, key : T) : Node? {
         var nd : Node? = cnd
         if (nd == null) return null
         if (key < nd.key) {
@@ -54,7 +54,7 @@ class SplayTree {
         return tmp
     }
 
-    private fun prev(cur : Node?, k : Int) : Node? {
+    private fun prev(cur : Node?, k : T) : Node? {
         if (cur == null) return null
         return when (k.compareTo(cur.key)) {
             -1 -> prev(cur.left, k)
@@ -67,8 +67,8 @@ class SplayTree {
         }
     }
 
-    private fun next(cur : Node?, k : Int) : Node? {
-        if (cur == null) return null;
+    private fun next(cur : Node?, k : T) : Node? {
+        if (cur == null) return null
         return when (k.compareTo(cur.key)) {
             1 -> next(cur.right, k)
             0 -> cur
@@ -80,7 +80,7 @@ class SplayTree {
         }
     }
 
-    fun put(k : Int) {
+    fun put(k : T) {
         if (root == null) {
             root = Node(k)
             return
@@ -101,7 +101,7 @@ class SplayTree {
         }
     }
 
-    fun contains(k : Int) : Boolean {
+    fun contains(k : T) : Boolean {
         root = splay(root, k)
         if (root == null) {
             return false
@@ -109,7 +109,7 @@ class SplayTree {
         return root!!.key == k
     }
 
-    fun del(k : Int) {
+    fun del(k : T) {
         if (root == null) return
         root = splay(root, k)
         if (root!!.key == k) {
@@ -123,18 +123,18 @@ class SplayTree {
         }
     }
 
-    fun prev(k : Int) : Int? {
+    fun prev(k : T) : T? {
         return prev(root, k)?.key
     }
 
-    fun next(k : Int) : Int? {
+    fun next(k : T) : T? {
         return next(root, k)?.key
     }
 
 }
 
 fun main(args: Array<String>) {
-    var tree = SplayTree()
+    var tree = SplayTree<Int>()
     for (i in 1..20 step 2) {
         tree.put(i)
     }
